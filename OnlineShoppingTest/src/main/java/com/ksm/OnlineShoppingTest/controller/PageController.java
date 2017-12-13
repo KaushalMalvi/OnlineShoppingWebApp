@@ -1,49 +1,86 @@
 package com.ksm.OnlineShoppingTest.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import com.ksm.ShoppingBackend.dao.CategoryDAO;
+import com.ksm.ShoppingBackend.dto.Category;
 
 @Controller
 public class PageController {
 
-	@RequestMapping (value = {"/","/index","/home"})
-	public ModelAndView index() {
+	@Autowired 
+	CategoryDAO categoryDAO;
+	
+	@RequestMapping(value= {"/home"})
+	public ModelAndView data() {
 		
 		ModelAndView mv = new ModelAndView("page");
-	//	mv.addObject("message", "Welcome To My Web Page..");
+		mv.addObject("title", "Home");
+		
+		//Passing the list of categories
+		mv.addObject("categories",categoryDAO.list());
+		mv.addObject("clickHome", true);
 		return mv;
 	}
 	
-	//Request Param is use in url with (key,value) pair
-	//In our project url is -http://localhost:8085/OnlineShoppingTest/test?hello=hi
-	
-	/*@RequestMapping(value = {"/test"})
-	public ModelAndView index(@RequestParam(value="hello",required=false)String hi) {
-
-		ModelAndView mv = new ModelAndView("page");
-			
-		if(hi==null) {
-				
-			hi = "Bye";
-		}
+	@RequestMapping(value= {"/aboutus"})
+	public ModelAndView about() {
 		
-		mv.addObject("message", hi);
-		return mv;
-	} 
-*/	
-
-	//Path variable is use for make url clean and SEO friendly 
-	//Using it can make url dynemic
-	
-	/*@RequestMapping(value = {"/test/{hello}"})
-	public ModelAndView index(@PathVariable(value="hello",required=false)String hi) {
-
 		ModelAndView mv = new ModelAndView("page");
-		mv.addObject("message", hi);
+		mv.addObject("title", "About Us");
+		mv.addObject("clickAbout", true);
 		return mv;
-	} 
-*/
+	}
+	
+	@RequestMapping(value= {"/contactus"})
+	public ModelAndView contact() {
+		
+		ModelAndView mv = new ModelAndView("page");
+		mv.addObject("title", "Contact Us");
+		mv.addObject("clickContact", true);
+		return mv;
+	}
+	
+	
+	/*
+	 * For view all products base on category
+	 * 
+	 * */
+	@RequestMapping(value= {"/show/all/products"})
+	public ModelAndView showAllProducts() {
+		
+		ModelAndView mv = new ModelAndView("page");
+		mv.addObject("title", "All Products");
+		
+		/*Passing list of categories*/
+		mv.addObject("categories",categoryDAO.list());
+		
+		mv.addObject("clickAllProducts", true);
+		return mv;
+	}
+	
+	@RequestMapping(value= {"/show/category/{id}/products"})
+	public ModelAndView showCategoryProducts(@PathVariable(value="id")int id) {
+		
+		ModelAndView mv = new ModelAndView("page");
+		
+		/*
+		 * CategoryDAO to fetch category base on id
+		 * */
+		Category category = categoryDAO.get(id);
+		mv.addObject("title", category.getName());		
+		
+		/*Passing list of categories*/
+		mv.addObject("categories",categoryDAO.list());
+		
+		/*View category by id*/
+		mv.addObject("category", category);
+		
+		mv.addObject("clickCategoryProduct", true);
+		return mv;
+	}
+	
 }
