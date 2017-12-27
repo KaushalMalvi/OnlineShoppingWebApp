@@ -17,8 +17,9 @@ public class Category {
 	private int id;
 	private String name;
 	private String description;
-	@Column(name="img_Url")
+	@Column(name="image_url")
 	private String imgUrl;
+	@Column(name="is_active")
 	private boolean active = true;
 	public int getId() {
 		return id;
