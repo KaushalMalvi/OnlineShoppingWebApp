@@ -76,6 +76,10 @@
 			<c:if test="${clickCategoryProduct == true}">
 				<%@ include file="listProducts.jsp"%>
 			</c:if>
+			
+			<c:if test="${clickOnSingleProduct == true}">
+				<%@ include file="singleProduct.jsp"%>
+			</c:if>
 
 		</div>
 		<!-- Footer Section -->
